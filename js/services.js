@@ -1,6 +1,7 @@
-var bookStoreServices = angular.module('bookStoreServices',['ngResource']);
+var bookStoreServices = angular.module('BookStoreServices',['ngResource']);
 
 bookStoreServices.factory('Book',['$resource',
 	function($resource){
-		return $resource();
-	}]);
+	    return booklist;
+	}
+]);
