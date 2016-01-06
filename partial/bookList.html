@@ -15,8 +15,8 @@
 					</p>
 					<p class="mt_10">
 						<span>原价：<span class="grey999" style="text-decoration: line-through">¥{{book.price}}</span></span>
-						<span class="ml_20">现价：<span class="green f14 bold">¥{{book.price * 0.64}}</span></span>
-						<span class="ml_20">为您节省：<span class="org">¥{{book.price*0.36}}（6.4折）</span></span>
+						<span class="ml_20">现价：<span class="green f14 bold">{{book.price * 0.64  |  currency:"¥" }}</span></span>
+						<span class="ml_20">为您节省：<span class="org">{{book.price*0.36 |  currency:"¥"}}  （6.4折）</span></span>
 					</p>
 					<p title="{{book.authors.join(',')}}" class="bg_yellow">{{book.authors.join(',')}}
 					</p>
@@ -27,8 +27,8 @@
 					</p>
 					<p class="mt_15">
 						<a href="javascript:;" class="btn-small btn-silver in_block" onclick="showPopupDiv($('#editBookLayer'))" ng-click="setCurrent(book)">编辑</a>
-						<a href="javascript:;" class="btn-small btn-silver in_block">删除</a>
-						<a href="javascript:;" class="btn-small btn-green in_block ml_20" ng-click="addBook(book.ISBN)"> + 添加到购物车</a>
+						<a href="javascript:;" class="btn-small btn-silver in_block" ng-click="deleteBook(book.ISBN)">删除</a>
+						<a href="javascript:;" class="btn-small btn-green in_block ml_20" ng-click="addBookToCart(book.ISBN)"> + 添加到购物车</a>
 					</p>
 				</div>
 			</li>
@@ -51,23 +51,23 @@
 							<td class="tdTitle" width="60">书名：</td>
 							<td width="320"><input type="text"
 								class="txtNew w300"
-								value="{{current.bookName}}"></td>
+								ng-model="current.bookName"></td>
 						</tr>
 						<tr>
 							<td class="tdTitle">价格：</td>
-							<td><input type="number" class="txtNew t50" value="{{current.price}}"></td>
+							<td><input type="number" class="txtNew t50" ng-model="current.price"></td>
 						</tr>
 						<tr>
 							<td class="tdTitle">作者：</td>
 							<td><input type="text"
 								class="txtNew w300"
-								value="{{current.authors}}"></td>
+								ng-model="current.authors"></td>
 						</tr>
 						<tr>
 							<td class="tdTitle">出版社：</td>
 							<td><input type="text"
 								class="txtNew w200"
-								value="{{current.press}}"></td>
+								ng-model="current.press"></td>
 						</tr>
 						<tr>
 							<td class="tdTitle">描述：</td>
@@ -82,11 +82,12 @@
 					onclick="hidePopupDiv($('#editBookLayer'))">关闭</a>
 				<a href="javascript:;"
 					class="closePopBox btn-small btn-blue in_block"
-					ng-click="comfirmEdit(current)">提交</a>
+					ng-init="updateStatus" ng-click="comfirmEdit(current)" >提交</a>
 			</div>
 		</div>
 	</div>
 	
+	<div  ng-include="cart.html"></div>
 	<!-- 购物车模块 -->
 	<div class="shoppingCart" ng-controller="CartCtrl">
 		<a href="" ng-click="toggleShow()"><span ng-hide="show">显示</span><span ng-show="show">隐藏</span></a>
@@ -105,19 +106,19 @@
 						<tr ng-repeat="book in $parent.cart">
 							<td>{{book.ISBN}}</td>
 							<td>{{book.bookName}}</td>
-							<td>¥{{book.price*0.64}}</td>
-							<td><input type="number" min="1" class="t50" value={{book.num}}></td>
-							<td>¥{{book.price*0.64*book.num}}</td>
-							<td><a href="javascript:;" ng-click="$parent.removeBook(book.ISBN)">删除</a></td>
+							<td>{{book.price*0.64  |  currency:"¥"}}</td>
+							<td><input type="number" min="1" class="t50" ng-model="book.num"></td>
+							<td>{{book.price*0.64*book.num  |  currency:"¥"}}</td>
+							<td><a href="javascript:;" ng-click="$parent.removeBookFromCart(book.ISBN)">删除</a></td>
 						</tr>
 						<tr>
 							<td colspan="5" align="right">合计</td>
-							<td>¥75.22</td>
+							<td>{{ getTotal() |  currency:"¥"}} </td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div style="display: none;">
+			<div ng-show="$parent.cart.length===0">
 				<p class="center">您的购物车里目前还没有图书</p>
 			</div>
 		</div>

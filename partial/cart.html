@@ -1,0 +1,35 @@
+	<!-- 购物车模块 -->
+	<div class="shoppingCart" ng-controller="CartCtrl">
+		<a href="" ng-click="toggleShow()"><span ng-hide="show">显示</span><span ng-show="show">隐藏</span></a>
+		<div ng-show="show">
+			<div>
+				<table cellpadding="2" class="tableListNew tableNarrow" width="400">
+					<tbody>
+						<tr>
+							<td width="5%" class="bold">&nbsp;</td>
+							<td width="30%" class="bold">书名</td>
+							<td width="20%" class="bold">价格</td>
+							<td width="15%" class="bold">数量</td>
+							<td width="20%" class="bold">小计</td>
+							<td width="10%" class="bold">操作</td>
+						</tr>
+						<tr ng-repeat="book in $parent.cart">
+							<td>{{book.ISBN}}</td>
+							<td>{{book.bookName}}</td>
+							<td>{{book.price*0.64  |  currency:"¥"}}</td>
+							<td><input type="number" min="1" class="t50" ng-model="book.num"></td>
+							<td>{{book.price*0.64*book.num  |  currency:"¥"}}</td>
+							<td><a href="javascript:;" ng-click="$parent.removeBookFromCart(book.ISBN)">删除</a></td>
+						</tr>
+						<tr>
+							<td colspan="5" align="right">合计</td>
+							<td>{{ getTotal() |  currency:"¥"}} </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div ng-show="$parent.cart.length===0">
+				<p class="center">您的购物车里目前还没有图书</p>
+			</div>
+		</div>
+	</div>

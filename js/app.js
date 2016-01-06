@@ -12,11 +12,11 @@ bookStoreApp.config(['$routeProvider',
         templateUrl: 'partial/bookList.html',
         controller: 'BookListCtrl'
       }).
-      when('/phones/:phoneId', {
-        templateUrl: 'partials/phone-detail.html',
-        controller: 'PhoneDetailCtrl'
+      when('/book/:bookId', {
+        templateUrl: 'partials/bookDetail.html',
+        controller: 'BookDetailCtrl'
       }).
       otherwise({
-        redirectTo: '/phones'
+        redirectTo: '/booklist'
       });
   }]);
